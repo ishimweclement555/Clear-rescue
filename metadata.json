@@ -1,0 +1,6 @@
+{
+  "name": "CLEAR RESCUE AI - Emergency Detection & Response",
+  "description": "AI-Powered Smart Emergency Detection & Response Platform for Rwanda and East Africa. Real-time multi-sensor monitoring, incident response, and IoT telemetry.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

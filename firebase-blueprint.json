@@ -1,0 +1,181 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile with role-based access control",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "maxLength": 128 },
+        "email": { "type": "string", "maxLength": 256 },
+        "displayName": { "type": "string", "maxLength": 128 },
+        "role": { "type": "string", "enum": ["customer", "technician", "admin", "superadmin"] },
+        "organizationId": { "type": "string", "maxLength": 128 },
+        "phone": { "type": "string", "maxLength": 32 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "role"]
+    },
+    "Device": {
+      "title": "Device",
+      "description": "CLEAR RESCUE AI monitoring hardware unit",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "deviceCode": { "type": "string", "maxLength": 64 },
+        "name": { "type": "string", "maxLength": 128 },
+        "locationId": { "type": "string", "maxLength": 128 },
+        "locationName": { "type": "string", "maxLength": 128 },
+        "organizationId": { "type": "string", "maxLength": 128 },
+        "status": { "type": "string", "enum": ["online", "offline", "warning", "emergency"] },
+        "connectionType": { "type": "string", "enum": ["4G", "WiFi", "Ethernet"] },
+        "batteryLevel": { "type": "number" },
+        "firmwareVersion": { "type": "string", "maxLength": 32 },
+        "lastSeen": { "type": "string", "format": "date-time" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "deviceCode", "name", "status"]
+    },
+    "Sensor": {
+      "title": "Sensor",
+      "description": "Sensors connected to monitoring devices",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "deviceId": { "type": "string", "maxLength": 128 },
+        "sensorType": { "type": "string", "maxLength": 64 },
+        "measurement": { "type": "string", "maxLength": 64 },
+        "unit": { "type": "string", "maxLength": 32 },
+        "status": { "type": "string", "enum": ["NORMAL", "WARNING", "CRITICAL", "OFFLINE"] },
+        "lastReading": { "type": "number" },
+        "warningThreshold": { "type": "number" },
+        "criticalThreshold": { "type": "number" },
+        "lastUpdated": { "type": "string", "format": "date-time" },
+        "calibrationStatus": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["id", "deviceId", "sensorType", "status"]
+    },
+    "SensorReading": {
+      "title": "SensorReading",
+      "description": "Telemetry historical log readings",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "sensorId": { "type": "string", "maxLength": 128 },
+        "deviceId": { "type": "string", "maxLength": 128 },
+        "sensorType": { "type": "string", "maxLength": 64 },
+        "value": { "type": "number" },
+        "unit": { "type": "string", "maxLength": 32 },
+        "status": { "type": "string", "maxLength": 32 },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "sensorId", "deviceId", "value", "timestamp"]
+    },
+    "Incident": {
+      "title": "Incident",
+      "description": "Emergency incident detected and tracked",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "incidentCode": { "type": "string", "maxLength": 64 },
+        "deviceId": { "type": "string", "maxLength": 128 },
+        "locationName": { "type": "string", "maxLength": 128 },
+        "eventType": { "type": "string", "maxLength": 128 },
+        "severity": { "type": "string", "enum": ["INFO", "WARNING", "CRITICAL"] },
+        "status": { "type": "string", "enum": ["OPEN", "ACKNOWLEDGED", "INVESTIGATING", "RESOLVED", "FALSE_ALARM"] },
+        "sensorsInvolved": { "type": "string", "maxLength": 256 },
+        "summary": { "type": "string", "maxLength": 1000 },
+        "aiExplanation": { "type": "string", "maxLength": 1000 },
+        "recommendedAction": { "type": "string", "maxLength": 500 },
+        "confidence": { "type": "number" },
+        "createdTime": { "type": "string", "format": "date-time" },
+        "acknowledgedTime": { "type": "string", "format": "date-time" },
+        "resolvedTime": { "type": "string", "format": "date-time" },
+        "assignedTechnician": { "type": "string", "maxLength": 128 }
+      },
+      "required": ["id", "eventType", "severity", "status", "createdTime"]
+    },
+    "MaintenanceRecord": {
+      "title": "MaintenanceRecord",
+      "description": "Hardware diagnostics and technician service logs",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "deviceId": { "type": "string", "maxLength": 128 },
+        "technicianName": { "type": "string", "maxLength": 128 },
+        "title": { "type": "string", "maxLength": 256 },
+        "status": { "type": "string", "enum": ["SCHEDULED", "IN_PROGRESS", "COMPLETED", "CANCELLED"] },
+        "priority": { "type": "string", "maxLength": 32 },
+        "partsReplaced": { "type": "string", "maxLength": 256 },
+        "notes": { "type": "string", "maxLength": 1000 },
+        "scheduledDate": { "type": "string", "format": "date-time" },
+        "completedDate": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "deviceId", "title", "status"]
+    },
+    "Notification": {
+      "title": "Notification",
+      "description": "In-app and simulated alerts",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "title": { "type": "string", "maxLength": 256 },
+        "message": { "type": "string", "maxLength": 1000 },
+        "severity": { "type": "string", "maxLength": 32 },
+        "channel": { "type": "string", "maxLength": 32 },
+        "isRead": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "title", "message", "createdAt"]
+    },
+    "AuditLog": {
+      "title": "AuditLog",
+      "description": "Security and action audit logs",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "userEmail": { "type": "string", "maxLength": 256 },
+        "action": { "type": "string", "maxLength": 128 },
+        "resource": { "type": "string", "maxLength": 128 },
+        "details": { "type": "string", "maxLength": 500 },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "action", "resource", "timestamp"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profiles and RBAC metadata"
+    },
+    "/devices/{deviceId}": {
+      "schema": "Device",
+      "description": "CLEAR RESCUE AI hardware units and status"
+    },
+    "/sensors/{sensorId}": {
+      "schema": "Sensor",
+      "description": "Sensors and threshold configurations"
+    },
+    "/sensor_readings/{readingId}": {
+      "schema": "SensorReading",
+      "description": "Historical time-series sensor telemetry data"
+    },
+    "/incidents/{incidentId}": {
+      "schema": "Incident",
+      "description": "Emergency incidents and lifecycle status"
+    },
+    "/maintenance_records/{recordId}": {
+      "schema": "MaintenanceRecord",
+      "description": "Technician maintenance work tickets and history"
+    },
+    "/notifications/{notificationId}": {
+      "schema": "Notification",
+      "description": "Alert notifications generated by emergencies"
+    },
+    "/audit_logs/{logId}": {
+      "schema": "AuditLog",
+      "description": "System security and administrative audit trail"
+    }
+  }
+}
